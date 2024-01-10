@@ -5,7 +5,6 @@
 * Low Power sleep mode
 * SQW Interrupt
 * use DS3231 AT24C32 Memory to save Alarm (not arduino eeprom)
-*
 *  
 * use interrupt pin when alarm trigered so the Arduino can use Low Power Sleep mode to save energy and save the oled from continuosly turn on. I made it to for portable use powered by Lipo 3.7v with TP4056 rechargeable modul.
 * DS3231 SQW pin has to be connected to Arduino interrupt capable pin (D2 or D3 on Pro Mini/Nano). Without these pin alarm will not triggered.

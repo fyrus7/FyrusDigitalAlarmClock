@@ -1,10 +1,10 @@
 /*
-* Fyrus Digital ALarm CLock
+*  Fyrus Digital ALarm CLock
 *  
-* DS3231 / Arduino Pro Mini 3.3v 8Mhz / SSD1306 Oled Display / Passive Buzzer / 2 Button
+*  DS3231 / Arduino Pro Mini 3.3v 8Mhz / SSD1306 Oled Display / Passive Buzzer / 2 Button
 *  
-* Digital Alarm clock use DS3231 Memory not Arduino memory,
-* use interrupt pin when alarm trigered so the Arduino can use Low Power Sleep mode to save energy and save the oled from continuosly turn on.
+*  Digital Alarm clock use DS3231 Memory not Arduino memory,
+*  use interrupt pin when alarm trigered so the Arduino can use Low Power Sleep mode to save energy and save the oled from continuosly turn on.
 *
 */
 

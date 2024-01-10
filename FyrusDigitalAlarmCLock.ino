@@ -6,6 +6,10 @@
 *  Digital Alarm clock use DS3231 Memory not Arduino memory,
 *  use interrupt pin when alarm trigered so the Arduino can use Low Power Sleep mode to save energy and save the oled from continuosly turn on.
 *
+*  Press button 1 & button 2 simultaneously to enter Menu.
+*  Press button 1 to wake from sleep mode.
+*  Press any button to stop alarm.
+*
 */
 
 const unsigned char PROGMEM FSufi2 [] = {
@@ -98,15 +102,14 @@ const char* const months_name_table[] PROGMEM = {
   months_name_4, months_name_5, months_name_6, months_name_7,
   months_name_8, months_name_9, months_name_10, months_name_11,};
 
-//--> Variables for Buttons
+// Buttons
 byte btn_Select, btn_Down;
 
-//--> Variable for SQW pin
+// DS3231 SQW pin
 const int sqwPin = 2;
 
-//--> Variable for Buzzer
+// Buzzer pin
 byte Buzzer = 5;
-        
 
 
 // Variables for Menus
@@ -153,7 +156,6 @@ const long intervalGetTimeDate = 1000;       // interval (milliseconds)
 
 const unsigned long sleepTimeout = 15000;    // 15 second to sleep mode
 volatile unsigned long lastActivityTime = 0; // Declare as volatile for ISR safety
-const int CRT_display = 300;                 // CRT Off Animation duration in milliseconds
 
 
 void wakeUp(){
@@ -168,7 +170,7 @@ void timerISR() {
 void setup() {
 
   pinMode(3, INPUT_PULLUP);
-  pinMode(6, INPUT_PULLUP);
+  pinMode(4, INPUT_PULLUP);
   pinMode(sqwPin, INPUT_PULLUP);
 
   pinMode(Buzzer, OUTPUT);
@@ -187,14 +189,14 @@ void setup() {
   }
 */
 
-  rtc.disable32K(); // disable 32K Pin
+  rtc.disable32K();
 
   rtc.disableAlarm(1);
   rtc.disableAlarm(2);
   rtc.clearAlarm(1);
   rtc.clearAlarm(2);
 
-  rtc.writeSqwPinMode(DS3231_OFF); // SQW pin alarm interrupt mode
+  rtc.writeSqwPinMode(DS3231_OFF);
 
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.clearDisplay();
@@ -546,24 +548,13 @@ void loop() {
 
   // Check if it's time to sleep when no button is pressed.
   if (millis() - lastActivityTime > sleepTimeout) {
-    displayOff();
+    display.ssd1306_command(SSD1306_DISPLAYOFF);
     Timer1.stop();
     sleep();
     Timer1.start();
   }
 }
 
-
-void displayOff() { // turn display off when sleep.
-  unsigned long CRTStartTime = millis();
-  while (millis() - CRTStartTime <= CRT_display) {
-    int width = map(millis() - CRTStartTime, 0, CRT_display, 128, 0);
-    display.clearDisplay();
-    display.fillRect((128 - width) / 2, 64 / 2, width, 2, SSD1306_WHITE);   
-    display.display();
-  }
-  display.ssd1306_command(SSD1306_DISPLAYOFF);
-}
 
 void sleep() { // sleep forever until interrupt by button or alarm.
   attachInterrupt(digitalPinToInterrupt(3), wakeUp, FALLING);
@@ -575,8 +566,8 @@ void sleep() { // sleep forever until interrupt by button or alarm.
 
 
 void read_button() {
-  btn_Select = digitalRead(6);
   btn_Down = digitalRead(3);
+  btn_Select = digitalRead(4);
 
   if (btn_Select == LOW || btn_Down == LOW || digitalRead(sqwPin) == LOW){
     lastActivityTime = millis();

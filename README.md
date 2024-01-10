@@ -25,3 +25,9 @@
  2. connect SQW pin from DS3231 to pin 2 of Arduino.
  3. connect button 1 to pin 3 (button interrupt), connect button 2 to pin 4.
  4. connect Buzzer to pin 5. 
+
+# HOW TO USE
+*
+* Press Button 1 & Button 2 simultaneously to enter Menu.
+* Press Button 1 to wake from Low Power Sleep Mode (turn display ON).
+* Press any button to stop alarm.

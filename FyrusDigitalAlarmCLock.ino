@@ -1,3 +1,13 @@
+/*
+* Fyrus Digital ALarm CLock
+*  
+* DS3231 / Arduino Pro Mini 3.3v 8Mhz / SSD1306 Oled Display / Passive Buzzer / 2 Button
+*  
+* Digital Alarm clock use DS3231 Memory not Arduino memory,
+* use interrupt pin when alarm trigered so the Arduino can use Low Power Sleep mode to save energy and save the oled from continuosly turn on.
+*
+*/
+
 const unsigned char PROGMEM FSufi2 [] = {
   0xff, 0xff, 0xff, 0xff, 0xff, 0xf8, 0xff, 0xff, 0xff, 0xff, 0xff, 0xf8, 0xff, 0xff, 0xff, 0xff, 
   0xff, 0xf8, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x38, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x38, 0xe0, 0x00, 
@@ -38,6 +48,9 @@ const unsigned char Select_Buttom [] PROGMEM = {
 #include <TimerOne.h>
 #include <LowPower.h>
 #include <Adafruit_SSD1306.h>
+#include <Fonts/FyrusClockFontL.h>
+#include <Fonts/FyrusClockFontS.h>
+
 
 RTC_DS3231 rtc;
 
@@ -50,13 +63,13 @@ char st[2];
 char _nameoftheDay[9];
 char _monthsName[3];
 
-const char daysOfTheWeek_0[] PROGMEM = "Sunday";   
-const char daysOfTheWeek_1[] PROGMEM = "Monday";
-const char daysOfTheWeek_2[] PROGMEM = "Tuesday";
-const char daysOfTheWeek_3[] PROGMEM = "Wednesday";
-const char daysOfTheWeek_4[] PROGMEM = "Thursday";
-const char daysOfTheWeek_5[] PROGMEM = "Friday";
-const char daysOfTheWeek_6[] PROGMEM = "Saturday";
+const char daysOfTheWeek_0[] PROGMEM = "SUN";   
+const char daysOfTheWeek_1[] PROGMEM = "MON";
+const char daysOfTheWeek_2[] PROGMEM = "TUE";
+const char daysOfTheWeek_3[] PROGMEM = "WED";
+const char daysOfTheWeek_4[] PROGMEM = "THU";
+const char daysOfTheWeek_5[] PROGMEM = "FRI";
+const char daysOfTheWeek_6[] PROGMEM = "SAT";
 
 const char* const daysOfTheWeek_table[] PROGMEM = {
   daysOfTheWeek_0,
@@ -67,18 +80,18 @@ const char* const daysOfTheWeek_table[] PROGMEM = {
   daysOfTheWeek_5,
   daysOfTheWeek_6};
 
-const char months_name_0[] PROGMEM = "Jan";   
-const char months_name_1[] PROGMEM = "Feb";
-const char months_name_2[] PROGMEM = "Mar";
-const char months_name_3[] PROGMEM = "Apr";
-const char months_name_4[] PROGMEM = "May";
-const char months_name_5[] PROGMEM = "Jun";
-const char months_name_6[] PROGMEM = "Jul";
-const char months_name_7[] PROGMEM = "Aug";
-const char months_name_8[] PROGMEM = "Sep";
-const char months_name_9[] PROGMEM = "Oct";
-const char months_name_10[] PROGMEM = "Nov";
-const char months_name_11[] PROGMEM = "Dec";
+const char months_name_0[] PROGMEM = "JAN";   
+const char months_name_1[] PROGMEM = "FEB";
+const char months_name_2[] PROGMEM = "MAR";
+const char months_name_3[] PROGMEM = "APR";
+const char months_name_4[] PROGMEM = "MAY";
+const char months_name_5[] PROGMEM = "JUN";
+const char months_name_6[] PROGMEM = "JUL";
+const char months_name_7[] PROGMEM = "AUG";
+const char months_name_8[] PROGMEM = "SEP";
+const char months_name_9[] PROGMEM = "OCT";
+const char months_name_10[] PROGMEM = "NOV";
+const char months_name_11[] PROGMEM = "DEC";
 
 const char* const months_name_table[] PROGMEM = {
   months_name_0, months_name_1, months_name_2, months_name_3,
@@ -134,13 +147,13 @@ bool Blink_Alarm_Display2 = false;
 
 
 // Variables for Millis to update Time and Date. Also for the Alarm interval
-unsigned long previousMillisGetTimeDate = 0; //--> will store last time was updated
-const long intervalGetTimeDate = 1000; //--> interval (milliseconds) 
+unsigned long previousMillisGetTimeDate = 0; // will store last time was updated
+const long intervalGetTimeDate = 1000;       // interval (milliseconds) 
 
 
-const unsigned long sleepTimeout = 15000; // 15 second to sleep mode
+const unsigned long sleepTimeout = 15000;    // 15 second to sleep mode
 volatile unsigned long lastActivityTime = 0; // Declare as volatile for ISR safety
-const int CRT_display = 300; // CRT Off Animation duration in milliseconds
+const int CRT_display = 300;                 // CRT Off Animation duration in milliseconds
 
 
 void wakeUp(){
@@ -153,7 +166,6 @@ void timerISR() {
 
 
 void setup() {
-  //Serial.begin(9600);
 
   pinMode(3, INPUT_PULLUP);
   pinMode(6, INPUT_PULLUP);
@@ -162,18 +174,18 @@ void setup() {
   pinMode(Buzzer, OUTPUT);
 
   rtc.begin();
-/*
-  if (! rtc.begin()) {
+
+/*  if (! rtc.begin()) {
    // Serial.println("Couldn't find RTC");
    // Serial.flush();
     while (1);
-  }*/
-/*
-  if (rtc.lostPower()) {
+  }
+*/
+/*  if (rtc.lostPower()) {
    // Serial.println("RTC lost power, let's set the time!");
-   // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  }*/
-
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
+*/
 
   rtc.disable32K(); // disable 32K Pin
 
@@ -182,7 +194,7 @@ void setup() {
   rtc.clearAlarm(1);
   rtc.clearAlarm(2);
 
-  rtc.writeSqwPinMode(DS3231_OFF); // Place SQW pin into alarm interrupt mode
+  rtc.writeSqwPinMode(DS3231_OFF); // SQW pin alarm interrupt mode
 
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.clearDisplay();
@@ -211,9 +223,8 @@ void loop() {
 
   
   // To update the Time and Date
-  unsigned long currentMillisGetTimeDate = millis();
-  if (currentMillisGetTimeDate - previousMillisGetTimeDate >= intervalGetTimeDate) {
-    // save the last time you blinked the LED
+     unsigned long currentMillisGetTimeDate = millis();
+  if (currentMillisGetTimeDate - previousMillisGetTimeDate >= intervalGetTimeDate){
     previousMillisGetTimeDate = currentMillisGetTimeDate;
 
     // Time and Date are displayed if Menu Status = False
@@ -228,102 +239,145 @@ void loop() {
         Alarm_Start = true;
         Alarm_Start2 = true;
 
-        display.setCursor(85, 0);
         DateTime alarmTime = rtc.getAlarm1();
 
-        display.write(0x0E); display.print(F(" "));
-
-        if (alarmTime.hour() < 10) {
-          display.print(F("0"));
-          display.print(alarmTime.hour());
-        } else {
-          display.print(alarmTime.hour());
+        display.setCursor(2, 0);
+        int hour12_1 = alarmTime.hour();
+        bool isPM_1 = false;
+        
+        if (hour12_1 >= 12) {
+              isPM_1 = true;
+        if (hour12_1 > 12) {
+            hour12_1 -= 12;
+            }
+        } else if (hour12_1 == 0) {
+            hour12_1 = 12;
         }
+
+        if (hour12_1 < 10) {
+          display.print(F("0"));
+        }
+          display.print(hour12_1, DEC);
           display.print(F(":"));
+          
         if (alarmTime.minute() < 10) {
           display.print(F("0"));
-          display.print(alarmTime.minute());
-        } else {
-          display.print(alarmTime.minute());
         }
+          display.print(alarmTime.minute(), DEC);
+          display.setCursor(34, 0);
+          display.print(isPM_1 ? F("PM") : F("AM"));
 
-        display.setCursor(2, 56);
+
         DateTime alarmTime2 = rtc.getAlarm2();
 
-        display.write(0x0E); display.print(F(" "));
-
-        if (alarmTime2.hour() < 10) {
-          display.print(F("0"));
-          display.print(alarmTime2.hour());
-        } else {
-          display.print(alarmTime2.hour());
+        display.setCursor(82, 0);
+        int hour12_2 = alarmTime2.hour();
+        bool isPM_2 = false;
+        
+        if (hour12_2 >= 12) {
+              isPM_2 = true;
+        if (hour12_2 > 12) {
+            hour12_2 -= 12;
+            }
+        } else if (hour12_2 == 0) {
+            hour12_2 = 12;
         }
+
+        if (hour12_2 < 10) {
+          display.print(F("0"));
+        }
+          display.print(hour12_2, DEC);
           display.print(F(":"));
+          
         if (alarmTime2.minute() < 10) {
           display.print(F("0"));
-          display.print(alarmTime2.minute());
-        } else {
-          display.print(alarmTime2.minute());
         }
+          display.print(alarmTime2.minute(), DEC);
+          display.setCursor(115, 0);
+          display.print(isPM_2 ? F("PM") : F("AM"));
         
-        //display.setCursor(110, 0); display.write(0x0E); display.write(0x0E);
+
         
       } else if (Alarm_Stat2 == 1){
         Alarm_Start2 = true;
         
-        display.setCursor(85, 0);
         DateTime alarmTime2 = rtc.getAlarm2();
 
-        display.write(0x0E); display.print(F(" "));
-
-        if (alarmTime2.hour() < 10) {
-          display.print(F("0"));
-          display.print(alarmTime2.hour());
-        } else {
-          display.print(alarmTime2.hour());
+        display.setCursor(82, 0);
+        int hour12_2 = alarmTime2.hour();
+        bool isPM_2 = false;
+        
+        if (hour12_2 >= 12) {
+              isPM_2 = true;
+        if (hour12_2 > 12) {
+            hour12_2 -= 12;
+            }
+        } else if (hour12_2 == 0) {
+            hour12_2 = 12;
         }
+
+        if (hour12_2 < 10) {
+          display.print(F("0"));
+        }
+          display.print(hour12_2, DEC);
           display.print(F(":"));
+          
         if (alarmTime2.minute() < 10) {
           display.print(F("0"));
-          display.print(alarmTime2.minute());
-        } else {
-          display.print(alarmTime2.minute());
         }
-        //display.setCursor(120, 0); display.write(0x0E);
+          display.print(alarmTime2.minute(), DEC);
+          display.setCursor(115, 0);
+          display.print(isPM_2 ? F("PM") : F("AM"));
+
 
       } else if (Alarm_Stat == 1) {
         Alarm_Start = true;
 
-        display.setCursor(85, 0);
         DateTime alarmTime = rtc.getAlarm1();
 
-        display.write(0x0E); display.print(F(" "));
-
-        if (alarmTime.hour() < 10) {
-          display.print(F("0"));
-          display.print(alarmTime.hour());
-        } else {
-          display.print(alarmTime.hour());
+        display.setCursor(82, 0);
+        int hour12_1 = alarmTime.hour();
+        bool isPM_1 = false;
+        
+        if (hour12_1 >= 12) {
+              isPM_1 = true;
+        if (hour12_1 > 12) {
+            hour12_1 -= 12;
+            }
+        } else if (hour12_1 == 0) {
+            hour12_1 = 12;
         }
+
+        if (hour12_1 < 10) {
+          display.print(F("0"));
+        }
+          display.print(hour12_1, DEC);
           display.print(F(":"));
+          
         if (alarmTime.minute() < 10) {
           display.print(F("0"));
-          display.print(alarmTime.minute());
-        } else {
-          display.print(alarmTime.minute());
         }
-        //display.setCursor(120, 0); display.write(0x0E);
+          display.print(alarmTime.minute(), DEC);
+          display.setCursor(115, 0);
+          display.print(isPM_1 ? F("PM") : F("AM"));
+
+          //display.setCursor(120, 0); display.write(0x0E);
+      } else {
+        display.setCursor(2, 0);
+        display.print(F("ALARM OFF"));
       }
       
 
 
       char buff[] = "hh:mm";
 
-      // A condition that is executed if the Alarm 1 starts and stops
+      // Alarm starts and stops
         if (digitalRead(sqwPin) == LOW){
 
           display.clearDisplay();
 
+
+        // Alarm 1 triggered
         Alarm_Start = true;
         Alarm_Sound = !Alarm_Sound;
         if (Alarm_Sound == true) {
@@ -333,39 +387,16 @@ void loop() {
         }
 
         Alarm_Duration++;
-        // Change the value 59 to increase or decrease the Alarm 1 duration
-        if (Alarm_Duration > 179) {
+        // Change the value 299 = 5 min to increase or decrease the Alarm 1 duration
+        if (Alarm_Duration > 299) {
           rtc.disableAlarm(1);
           Button_Sound(0);
           Alarm_Duration = 0;
           Alarm_Start = false;
         }
 
-        display.setTextSize(2);
-        Blink_Alarm_Display = !Blink_Alarm_Display;
-        if (Blink_Alarm_Display == true) {
-          display.setTextColor(WHITE);
-        } else {
-          display.setTextColor(BLACK);
-        }
-      
-        display.setCursor(35, 20);
-        display.setTextSize(2);
-        display.print(F("ALARM"));
-        display.setCursor(35, 42);
 
-        DateTime now = rtc.now();
-        display.print(now.toString(buff));
-
-      }
-      
-      
-      
-      // A condition that is executed if the Alarm 2 starts and stops
-        if (digitalRead(sqwPin) == LOW){
-
-          display.clearDisplay();
-
+        // Alarm 2 triggered
         Alarm_Start2 = true;
         Alarm_Sound2 = !Alarm_Sound2;
         if (Alarm_Sound2 == true) {
@@ -375,8 +406,8 @@ void loop() {
         }
 
         Alarm_Duration2++;
-        // Change the value 59 to increase or decrease the Alarm 2 duration
-        if (Alarm_Duration2 > 179) {
+        // Change the value 299 = 5 min to increase or decrease the Alarm 2 duration
+        if (Alarm_Duration2 > 299) {
           rtc.disableAlarm(2);
           Button_Sound2(0);
           Alarm_Duration2 = 0;
@@ -391,16 +422,21 @@ void loop() {
           display.setTextColor(BLACK);
         }
       
-        display.setCursor(35, 20);
+        display.setCursor(35, 10);
         display.setTextSize(2);
         display.print(F("ALARM"));
-        display.setCursor(35, 42);
+        display.setCursor(17, 48);
+
+        display.setTextSize(1);
+        display.setFont(&FyrusClockFontL);
 
         DateTime now = rtc.now();
         display.print(now.toString(buff));
 
+        display.setFont();
+
       } else {
-        //Digital_Clock_and_Date(_hour24, _minute, _second, _dtw, _day, _month ,_year);
+
         Digital_Clock_and_Date(_hour12, _minute, _second, _dtw, _day, _month ,_year);
       }
       
@@ -410,6 +446,7 @@ void loop() {
 
 
   read_button();
+
 
   // BUTTON USE to Stop the Alarm
   if (btn_Down == LOW || btn_Select == LOW && Alarm_Start == true) {
@@ -430,7 +467,7 @@ void loop() {
   }
 
 
-  // Conditions for displaying to the Menu
+  // Pressed both button to enter Menu
   if (btn_Down == LOW && btn_Select == LOW && Menu_Stat == false) {
     delay(500);
     Menu_Cnt = 1;
@@ -438,10 +475,10 @@ void loop() {
   }
 
   
-  // Looping to display Menu
+  // display Menu
   while (Menu_Stat == true) {
     read_button();
-    // Button Condition for selecting Setup Menu
+    // for selecting Setup Menu
     if (btn_Down == LOW) {
       delay(100);
       Menu_Cnt++;
@@ -476,7 +513,7 @@ void loop() {
     }
 
 
-    // Conditions for displaying Menu contents
+    // Menu contents
     if (Menu_Cnt == 1) {
       Menu_Display(Menu_Cnt);
     } else if (Menu_Cnt == 2) {
@@ -488,13 +525,13 @@ void loop() {
     } 
 
 
-    // Looping for Time and Date Setting Menu
+    // Time and Date Setting Menu
     while (Menu_Set == true && Menu_Set_cnt == 1) {
       Set_Alarm();
       delay(50);
     }
 
-    // Looping for Alarm Settings Menu
+    // Alarm Settings Menu
     while (Menu_Set == true && Menu_Set_cnt == 2) {
       Set_Alarm2();
       delay(50);
@@ -528,7 +565,7 @@ void displayOff() { // turn display off when sleep.
   display.ssd1306_command(SSD1306_DISPLAYOFF);
 }
 
-void sleep() { // sleep forever until interrupt been pressed.
+void sleep() { // sleep forever until interrupt by button or alarm.
   attachInterrupt(digitalPinToInterrupt(3), wakeUp, FALLING);
   attachInterrupt(digitalPinToInterrupt(sqwPin), wakeUp, FALLING);
   LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
@@ -536,7 +573,7 @@ void sleep() { // sleep forever until interrupt been pressed.
 }
 
 
-// Subroutines for reading Buttons
+
 void read_button() {
   btn_Select = digitalRead(6);
   btn_Down = digitalRead(3);
@@ -573,12 +610,12 @@ void GetDateTime(){
   }
   else {
     strcpy(st, "PM");
-  } 
+  }
 }
 
 
 
-// Subroutines for displaying Digital Clock and Date
+// display Clock and Date
 void Digital_Clock_and_Date(byte h, byte m, byte s, byte dtw, byte dy, byte mt, int yr) {
 
   display.drawLine(0, 12, 128, 12, SSD1306_WHITE);
@@ -586,70 +623,81 @@ void Digital_Clock_and_Date(byte h, byte m, byte s, byte dtw, byte dy, byte mt, 
 
   display.setTextColor(WHITE);
 
-  display.setTextSize(3);
-  display.setCursor(5, 20);
+  int colon = s;
+
+  display.setTextSize(1);
+  display.setFont(&FyrusClockFontL);
+  display.setCursor(1, 41);
   if (h < 10) {
     display.print(F("0"));
     display.print(h);
   } else {
     display.print(h);
   }
-  display.setTextSize(2);
-  display.print(F(":"));
-  display.setTextSize(3);
+  if (colon % 2 == 0) {
+    display.print(F(" "));
+  } else {
+    display.print(F(":"));
+  }
+  display.setCursor(51, 41);
   if (m < 10) {
     display.print(F("0"));
     display.print(m);
   } else {
     display.print(m);
   }
-  display.setTextSize(2);
-  display.print(F(":"));
+  if (colon % 2 == 0) {
+    display.print(F(" "));
+  } else {
+    display.print(F(":"));
+  }
+  display.setFont();
+  
+  display.setFont(&FyrusClockFontS);
+  display.setCursor(102, 41);
   if (s < 10) {
     display.print(F("0"));
     display.print(s);
   } else {
     display.print(s);
   }
+  display.setFont();
 
-  display.setCursor(102, 38);
+  display.setCursor(105, 25);
   display.setTextSize(1);
+  display.setFont(&FyrusClockFontS);
   if (hr24 < 12) {
     display.print(F("AM"));
   } else {
     display.print(F("PM"));
   }
+  display.setFont();
 
 
 
-  // To display Day Name
-  if (Menu_Stat == false) {
+    // display Day Name
     strcpy_P(_nameoftheDay,(char*)pgm_read_word(&(daysOfTheWeek_table[dtw])));
-    byte display_center_area = (127 - 65) / 2;
-    byte center_text = (strlen(_nameoftheDay) * 6) / 2;
     display.setTextSize(1);
-    display.setCursor(2, 0);
-    display.println(_nameoftheDay); 
-  }
+    display.setCursor(18, 56);
+    display.print(_nameoftheDay);
+    display.print(F(", "));
 
-  // To display the Date
-  display.setTextSize(1);
-  strcpy_P(_monthsName,(char*)pgm_read_word(&(months_name_table[mt-1])));
-  display.setCursor(55, 56);
-  if (dy < 10) {
+    // display Date
+    strcpy_P(_monthsName,(char*)pgm_read_word(&(months_name_table[mt-1])));
+    if (dy < 10) {
     display.print(F("0"));
     display.print(dy);
   } else {
     display.print(dy);
   }
-  display.print(F(", "));
-  display.print(_monthsName);
-  display.print(F(" "));
-  display.print(yr);
+    display.print(F(" "));
+    display.print(_monthsName);
+    display.print(F(" "));
+    display.print(yr);
 }
 
 
-// Subroutine to display Menu Display
+// Menu Display
 void Menu_Display(byte slct) {
   display.clearDisplay();
   
@@ -671,7 +719,7 @@ void Menu_Display(byte slct) {
   display.setCursor(7, 55);
   display.print(F("Back"));
 
-  // Conditions for the cursor position on the Menu
+  // Cursor position for Menu
   if (slct == 1) {
     display.drawBitmap(0, 20, Select_Side, 3, 5, WHITE);
   } else if (slct == 2) {
@@ -686,32 +734,42 @@ void Menu_Display(byte slct) {
 }
 
 
-// Subroutines for SET Clock and Date
+// display for SET Clock and Date
 void Set_Clock_and_Date(byte h, byte m, byte s, byte dy, byte mt, int yr) {
 
   display.setTextColor(WHITE);
 
   display.setTextSize(2);
-  display.setCursor(35, 18);
-  if (h < 10) {
-    display.print(F("0"));
-    display.print(h);
-  } else {
-    display.print(h);
-  }
-  display.print(F(":"));
-  if (m < 10) {
-    display.print(F("0"));
-    display.print(m);
-  } else {
-    display.print(m);
-  }
+  display.setCursor(17, 15);
+
+        int hour12_ = h;
+        bool isPM_ = false;
+        
+        if (hour12_ >= 12) {
+              isPM_ = true;
+        if (hour12_ > 12) {
+            hour12_ -= 12;
+            }
+        } else if (hour12_ == 0) {
+            hour12_ = 12;
+        }
+
+        if (hour12_ < 10) {
+          display.print(F("0"));
+        }
+          display.print(hour12_);
+          display.print(F(":"));
+          
+        if (m < 10) {
+          display.print(F("0"));
+        }
+          display.print(m);
+          display.print(isPM_ ? F(" PM") : F(" AM"));
 
 
-  // To display the Date
   display.setTextSize(1);
   strcpy_P(_monthsName,(char*)pgm_read_word(&(months_name_table[mt-1])));
-  display.setCursor(20, 36);
+  display.setCursor(20, 33);
   if (dy < 10) {
     display.print(F("0"));
     display.print(dy);
@@ -725,7 +783,7 @@ void Set_Clock_and_Date(byte h, byte m, byte s, byte dy, byte mt, int yr) {
 }
 
 
-// Subroutines for displaying Time and Date settings
+// displaying Time and Date settings
 void Set_Time_Date() {
 
   read_button();
@@ -735,9 +793,6 @@ void Set_Time_Date() {
   Set_Clock_and_Date(_hour24, _minute, _second, _day, _month ,_year);
 
   display.setTextSize(1);
-
-  display.setCursor(13, 0);
-  display.print(F("-- TIME & DATE --"));
 
   display.setCursor(28, 56);
   display.print(F("Save"));
@@ -792,7 +847,7 @@ void Set_Time_Date() {
   }
 
 
-  // Conditions for the cursor position
+  // Cursor position for Time & Date settings
   if (Menu_Set_TimeDate == 1) {
     Set_Time_Date_Display(Menu_Set_TimeDate);
   } else if (Menu_Set_TimeDate == 2) {
@@ -811,13 +866,10 @@ void Set_Time_Date() {
 
   display.display();
 
-  // Looping to set Hour
+  // set Hour
   while (set_Hour == true) {
     read_button();
     display.clearDisplay();
-
-    display.setCursor(13, 0);
-    display.print(F("-- TIME & DATE --"));
 
     Set_Clock_and_Date(_hour24, _minute, _second, _day, _month ,_year);
 
@@ -839,7 +891,7 @@ void Set_Time_Date() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(35, 19, 25, 18, BLACK);
+      display.fillRect(15, 13, 25, 18, BLACK);
     }
     
     display.display();
@@ -847,13 +899,10 @@ void Set_Time_Date() {
   }
 
 
-  // Looping to set Minute
+  // set Minute
   while (set_Minute == true) {
     read_button();
     display.clearDisplay();
-
-    display.setCursor(13, 0);
-    display.print(F("-- TIME & DATE --"));
 
     Set_Clock_and_Date(_hour24, _minute, _second, _day, _month ,_year);
 
@@ -875,7 +924,7 @@ void Set_Time_Date() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(70, 19, 25, 18, BLACK);
+      display.fillRect(50, 13, 25, 18, BLACK);
     }
     
     display.display();
@@ -883,13 +932,10 @@ void Set_Time_Date() {
   }
 
 
-  // Looping to set Day / Date
+  // set Day / Date
   while (set_Day == true) {
     read_button();
     display.clearDisplay();
-
-    display.setCursor(13, 0);
-    display.print(F("-- TIME & DATE --"));
 
     Set_Clock_and_Date(_hour24, _minute, _second, _day, _month ,_year);
 
@@ -911,7 +957,7 @@ void Set_Time_Date() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(20, 37, 12, 8, BLACK);
+      display.fillRect(20, 33, 12, 8, BLACK);
     }
     
     display.display();
@@ -919,13 +965,10 @@ void Set_Time_Date() {
   }
 
 
-  // Looping to set Month
+  // set Month
   while (set_Month == true) {
     read_button();
     display.clearDisplay();
-
-    display.setCursor(13, 0);
-    display.print(F("-- TIME & DATE --"));
 
     Set_Clock_and_Date(_hour24, _minute, _second, _day, _month ,_year);
 
@@ -947,7 +990,7 @@ void Set_Time_Date() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(50, 37, 20, 8, BLACK);
+      display.fillRect(50, 33, 20, 8, BLACK);
     }
     
     display.display();
@@ -955,13 +998,10 @@ void Set_Time_Date() {
   }
 
 
-  // Looping to set Year
+  // set Year
   while (set_Year == true) {
     read_button();
     display.clearDisplay();
-
-    display.setCursor(13, 0);
-    display.print(F("-- TIME & DATE --"));
 
     Set_Clock_and_Date(_hour24, _minute, _second, _day, _month ,_year);
 
@@ -983,7 +1023,7 @@ void Set_Time_Date() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(98, 37, 12, 8, BLACK);
+      display.fillRect(84, 33, 27, 8, BLACK);
     }
     
     display.display();
@@ -998,19 +1038,19 @@ void Set_Time_Date_Display(byte slc) {
     
   if (slc == 1) {
     //Set Hour
-    display.drawBitmap(45, 12, Select_Buttom, 5, 3, WHITE);
+    display.drawBitmap(26, 8, Select_Buttom, 5, 3, WHITE);
   } else if (slc == 2) {
     //Set Minute
-    display.drawBitmap(80, 12, Select_Buttom, 5, 3, WHITE);
+    display.drawBitmap(62, 8, Select_Buttom, 5, 3, WHITE);
   } else if (slc == 3) {
     //Set Day
-    display.drawBitmap(22, 47, Select_Top, 5, 3, WHITE);
+    display.drawBitmap(22, 44, Select_Top, 5, 3, WHITE);
   } else if (slc == 4) {
     //Set Month
-    display.drawBitmap(56, 47, Select_Top, 5, 3, WHITE);
+    display.drawBitmap(56, 44, Select_Top, 5, 3, WHITE);
   } else if (slc == 5) {
     //Set Year
-    display.drawBitmap(102, 47, Select_Top, 5, 3, WHITE);
+    display.drawBitmap(95, 44, Select_Top, 5, 3, WHITE);
   } else if (slc == 6) {
     //Save Settings
     display.drawBitmap(20, 58, Select_Side, 3, 5, WHITE);
@@ -1021,6 +1061,7 @@ void Set_Time_Date_Display(byte slc) {
 }
 
 
+// Function to save Alarm in DS3231 memory
 void setAlarmTime(int hour, int minute) {
   rtc.disableAlarm(1);
   rtc.clearAlarm(1);
@@ -1037,7 +1078,7 @@ void setAlarmTime(int hour, int minute) {
 
 
 
-// Subroutines for Alarm Settings
+// Alarm 1 Settings display
 void Set_Alarm() {
   read_button();
   
@@ -1064,8 +1105,8 @@ void Set_Alarm() {
     Set_minute_alarm = true;
   }
 
-  // Button Condition to enable Alarm and save Alarm settings
-  if (btn_Select == LOW && Menu_Set_Alarm == 3) { // enable alarm
+  // Enable Alarm 1
+  if (btn_Select == LOW && Menu_Set_Alarm == 3) {
     delay(500);
     
     Display_to_save();
@@ -1075,10 +1116,10 @@ void Set_Alarm() {
   }
 
 
-  // Button Condition to disable Alarm
-  if (btn_Select == LOW && Menu_Set_Alarm == 4) { // disable alarm
+  // Disable Alarm 1
+  if (btn_Select == LOW && Menu_Set_Alarm == 4) {
     delay(500);
-    // Disable and clear alarm
+
     rtc.disableAlarm(1);
     rtc.clearAlarm(1);
     
@@ -1097,7 +1138,7 @@ void Set_Alarm() {
   }
 
 
-  // Conditions for displaying the cursor position on the Alarm Settings
+  // Cursor position on the Alarm 1 Settings
   if (Menu_Set_Alarm == 1) {
     Set_Alarm_Cursor(Menu_Set_Alarm);
   } else if (Menu_Set_Alarm == 2) {
@@ -1111,7 +1152,7 @@ void Set_Alarm() {
   } 
 
 
-  // Looping for setting the Hour for Alarm
+  // setting the Hour for Alarm 1
   while (Set_hour_alarm == true && Menu_Set_Alarm == 1) {
     read_button();
     
@@ -1138,7 +1179,7 @@ void Set_Alarm() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(35, 10, 25, 20, BLACK);
+      display.fillRect(22, 10, 25, 20, BLACK);
     }
 
     display.display();
@@ -1146,7 +1187,7 @@ void Set_Alarm() {
   }
 
 
-  // Looping for setting the Minute for Alarm
+  // setting the Minute for Alarm 1
   while (Set_minute_alarm == true && Menu_Set_Alarm == 2) {
     read_button();
     
@@ -1173,7 +1214,7 @@ void Set_Alarm() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(70, 10, 25, 20, BLACK);
+      display.fillRect(57, 10, 25, 20, BLACK);
     }
 
     display.display();
@@ -1185,7 +1226,7 @@ void Set_Alarm() {
 
 
 
-// Subroutines for the Alarm Settings display
+// Alarm 1 Settings display
 void Set_Alarm_Display() {
 
   if (Alarm_Stat == 0) {
@@ -1204,26 +1245,35 @@ void Set_Alarm_Display() {
   }
 
 
-  //DateTime now = rtc.now();
   DateTime alarmTime = rtc.getAlarm1();
 
   display.setTextSize(2);
 
-  if (alarmTime.hour() < 10) {
-    display.setCursor(35, 10);
-    display.print(F("0"));
-    display.print(alarmTime.hour(), DEC);
-  } else {
-    display.setCursor(35, 10);
-    display.print(alarmTime.hour(), DEC);
-  }
-  display.print(F(":"));
-  if (alarmTime.minute() < 10) {
-    display.print(F("0"));
-    display.print(alarmTime.minute(), DEC);
-  } else {
-    display.print(alarmTime.minute(), DEC);
-  }
+        display.setCursor(22, 10);
+        int hour12_1 = alarmTime.hour();
+        bool isPM_1 = false;
+        
+        if (hour12_1 >= 12) {
+              isPM_1 = true;
+        if (hour12_1 > 12) {
+            hour12_1 -= 12;
+            }
+        } else if (hour12_1 == 0) {
+            hour12_1 = 12;
+        }
+
+        if (hour12_1 < 10) {
+          display.print(F("0"));
+        }
+          display.print(hour12_1, DEC);
+          display.print(F(":"));
+          
+        if (alarmTime.minute() < 10) {
+          display.print(F("0"));
+        }
+          display.print(alarmTime.minute(), DEC);
+          display.print(isPM_1 ? F(" PM") : F(" AM"));
+
 
   display.setTextSize(1);
   display.setCursor(7, 35);
@@ -1237,7 +1287,7 @@ void Set_Alarm_Display() {
 }
 
 
-
+// Function to save Alarm in DS3231 memory
 void setAlarmTime2(int hour, int minute) {
   rtc.disableAlarm(2);
   rtc.clearAlarm(2);
@@ -1254,7 +1304,7 @@ void setAlarmTime2(int hour, int minute) {
 
 
 
-// Subroutines for Alarm Settings
+// Alarm 2 Settings
 void Set_Alarm2() {
   read_button();
   
@@ -1281,8 +1331,8 @@ void Set_Alarm2() {
     Set_minute_alarm2 = true;
   }
 
-  // Button Condition to enable Alarm and save Alarm settings
-  if (btn_Select == LOW && Menu_Set_Alarm2 == 3) { // enable alarm
+  // Enable Alarm 2
+  if (btn_Select == LOW && Menu_Set_Alarm2 == 3) {
     delay(500);
     
     Display_to_save();
@@ -1292,8 +1342,8 @@ void Set_Alarm2() {
   }
 
 
-  // Button Condition to disable Alarm
-  if (btn_Select == LOW && Menu_Set_Alarm2 == 4) { // disable alarm
+  // Disable Alarm 2
+  if (btn_Select == LOW && Menu_Set_Alarm2 == 4) {
     delay(500);
     // Disable and clear alarm
     rtc.disableAlarm(2);
@@ -1314,7 +1364,7 @@ void Set_Alarm2() {
   }
 
 
-  // Conditions for displaying the cursor position on the Alarm Settings
+  // Cursor position on the Alarm 2 Settings
   if (Menu_Set_Alarm2 == 1) {
     Set_Alarm_Cursor(Menu_Set_Alarm2);
   } else if (Menu_Set_Alarm2 == 2) {
@@ -1328,7 +1378,7 @@ void Set_Alarm2() {
   } 
 
 
-  // Looping for setting the Hour for Alarm
+  // setting the Hour for Alarm 2
   while (Set_hour_alarm2 == true && Menu_Set_Alarm2 == 1) {
     read_button();
     
@@ -1355,7 +1405,7 @@ void Set_Alarm2() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(35, 10, 25, 20, BLACK);
+      display.fillRect(22, 10, 25, 20, BLACK);
     }
 
     display.display();
@@ -1363,7 +1413,7 @@ void Set_Alarm2() {
   }
 
 
-  // Looping for setting the Minute for Alarm
+  // setting the Minute for Alarm 2
   while (Set_minute_alarm2 == true && Menu_Set_Alarm2 == 2) {
     read_button();
     
@@ -1390,19 +1440,19 @@ void Set_Alarm2() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(70, 10, 25, 20, BLACK);
+      display.fillRect(57, 10, 25, 20, BLACK);
     }
 
     display.display();
     delay(_delay);
   }
-  
+
   display.display();
 }
 
 
 
-// Subroutines for the Alarm Settings display
+// Alarm 2 Settings display
 void Set_Alarm_Display2() {
 
   if (Alarm_Stat2 == 0) {
@@ -1421,27 +1471,35 @@ void Set_Alarm_Display2() {
   }
 
 
-
-  //DateTime now = rtc.now();
   DateTime alarmTime2 = rtc.getAlarm2();
 
   display.setTextSize(2);
 
-  if (alarmTime2.hour() < 10) {
-    display.setCursor(35, 10);
-    display.print(F("0"));
-    display.print(alarmTime2.hour(), DEC);
-  } else {
-    display.setCursor(35, 10);
-    display.print(alarmTime2.hour(), DEC);
-  }
-  display.print(F(":"));
-  if (alarmTime2.minute() < 10) {
-    display.print(F("0"));
-    display.print(alarmTime2.minute(), DEC);
-  } else {
-    display.print(alarmTime2.minute(), DEC);
-  }
+        display.setCursor(22, 10);
+        int hour12_2 = alarmTime2.hour();
+        bool isPM_2 = false;
+        
+        if (hour12_2 >= 12) {
+              isPM_2 = true;
+        if (hour12_2 > 12) {
+            hour12_2 -= 12;
+            }
+        } else if (hour12_2 == 0) {
+            hour12_2 = 12;
+        }
+
+        if (hour12_2 < 10) {
+          display.print(F("0"));
+        }
+          display.print(hour12_2, DEC);
+          display.print(F(":"));
+          
+        if (alarmTime2.minute() < 10) {
+          display.print(F("0"));
+        }
+          display.print(alarmTime2.minute(), DEC);
+          display.print(isPM_2 ? F(" PM") : F(" AM"));
+
 
   display.setTextSize(1);
   display.setCursor(7, 35);
@@ -1456,13 +1514,12 @@ void Set_Alarm_Display2() {
 
 
 
-
-// Subroutines for display and cursor position in Alarm Settings
+// Cursor position in Alarm Settings
 void Set_Alarm_Cursor(byte slc) {
   if (slc == 1) {
-    display.drawBitmap(45, 0, Select_Buttom, 5, 3, WHITE);
+    display.drawBitmap(32, 0, Select_Buttom, 5, 3, WHITE);
   } else if (slc == 2) {
-    display.drawBitmap(80, 0, Select_Buttom, 5, 3, WHITE);
+    display.drawBitmap(67, 0, Select_Buttom, 5, 3, WHITE);
   } else if (slc == 3) {
     display.drawBitmap(0, 35, Select_Side, 3, 5, WHITE);
   } else if (slc == 4) {
@@ -1471,12 +1528,9 @@ void Set_Alarm_Cursor(byte slc) {
     display.drawBitmap(0, 55, Select_Side, 3, 5, WHITE);
   } 
 }
-/*
-void ResetAlarm() {
-  DateTime alarmTime = rtc.getAlarm1();
-}
-*/
-// Subroutine to display the Save
+
+
+// Save popup display
 void Display_to_save() {
   display.clearDisplay(); 
   
@@ -1491,7 +1545,7 @@ void Display_to_save() {
 }
 
 
-// Subroutines to turn the Buzzer on or off
+// Buzzer on (1) or off (0)
 void Button_Sound(byte snd) {
   digitalWrite(Buzzer, snd);
 }

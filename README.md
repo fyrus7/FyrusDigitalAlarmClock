@@ -27,7 +27,9 @@
  4. connect Buzzer to pin 5. 
 
 # HOW TO USE
-*
 * Press Button 1 & Button 2 simultaneously to enter Menu.
 * Press Button 1 to wake from Low Power Sleep Mode (turn display ON).
 * Press any button to stop alarm.
+
+# Schematic (Wiring Diagram)
+[](https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Schematic.jpg)

@@ -13,13 +13,13 @@
 1. DS3231 RTC
 2. Arduino Pro Mini or Arduino Nano (ATmega328P 3.3v or 5v)
 3. SSD1306 0'96 Oled Display
-4. 2 buttons
+4. 2 Button
 5. Passive Buzzer
 6. On/Off Switch
-7. the 2 Custom Fonts provided ( paste it inside Adafruit_GFX_Library/FOnts )
+7. 2 Custom Fonts Provided (Paste it inside Adafruit_GFX_Library / Fonts)
 
-8. (Optional) Lipo 3.7v Battery (can use 2 AA battery with a holder)
-9. (Optional) TP4056 Charging modul (if you use rechargeable battery)
+8. (Optional) LiPo 3.7v Battery (or 2 AA Battery with Holder)
+9. (Optional) TP4056 Charging Module (if use LiPo Battery)
 
 # What to connect where?
  1. connect display and DS3231 to I2C pin as usual.

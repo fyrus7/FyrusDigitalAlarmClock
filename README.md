@@ -22,7 +22,7 @@
 8. (Optional) TP4056 Module to charge the LiPo.
 
 ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
-( Adafuirt_GFX_Library / Fonts / HERE ).
+* ( Adafuirt_GFX_Library / Fonts / HERE ).
 
 # What to connect where?
  1. connect display and DS3231 to I2C pin as usual.

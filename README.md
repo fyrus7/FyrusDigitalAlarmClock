@@ -1,8 +1,8 @@
 # Fyrus Digital Alarm Clock
 * 12 Hour Clock Display
-* 2 Editable Alarm
+* Edit Alarm with button (2 Editable Alarm)
 * Edit Time, Date with button
-* Low Power sleep mode
+* Low Power sleep mode ([Low Power Library](https://github.com/rocketscream/Low-Power))
 * SQW Interrupt
 * use DS3231 AT24C32 Memory to save Alarm (not arduino eeprom)
 *  

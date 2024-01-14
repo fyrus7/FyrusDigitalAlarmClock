@@ -11,24 +11,6 @@
 * in Sleep Mode, the display is turn Off (blank), without Alarm triggered LOW on pin 2, use Button 1 which attach to pin 3 to wake the display.
 * I made this clock for portable use powered by Lipo 3.7v. Power saving is a must.
 
-# What You Need?
-1. DS3231 RTC
-2. Arduino Pro Mini or Arduino Nano (ATmega328P 3.3v or 5v)
-3. SSD1306 0'96 Oled Display
-4. 2 Button
-5. Passive Buzzer
-6. On/Off Switch
-7. 2 Custom Fonts Provided (Paste it inside Adafruit_GFX_Library / Fonts).
-
-8. (Optional) LiPo 3.7v Battery (or 2 AA Battery with Holder).
-9. (Optional) TP4056 Charging Module (if use LiPo Battery).
-
-# What to connect where?
- 1. connect display and DS3231 to I2C pin as usual.
- 2. connect SQW pin from DS3231 to pin 2 of Arduino.
- 3. connect button 1 to pin 3 (button interrupt), connect button 2 to pin 4.
- 4. connect Buzzer to pin 5.
-
 # What Tou Need?
 1. DS3231 RTC
 2. Arduino Pro Mini or Arduino Nano (ATmega328P 3.3v or 5v).
@@ -41,6 +23,12 @@
 
 ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
 ( Adafuirt_GFX_Library / Fonts / HERE ).
+
+# What to connect where?
+ 1. connect display and DS3231 to I2C pin as usual.
+ 2. connect SQW pin from DS3231 to pin 2 of Arduino.
+ 3. connect button 1 to pin 3 (button interrupt), connect button 2 to pin 4.
+ 4. connect Buzzer to pin 5.
 
 # HOW TO USE
 * Press Button 1 & Button 2 simultaneously to enter Menu.

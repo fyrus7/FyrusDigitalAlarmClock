@@ -5,9 +5,11 @@
 * Low Power sleep mode ([Low Power Library](https://github.com/rocketscream/Low-Power))
 * SQW Interrupt
 * Save Alarm to DS3231 AT24C32 Memory ([RTClib](https://github.com/adafruit/RTClib))
-*  
-* use interrupt pin when alarm trigered so the Arduino can use Low Power Sleep mode to save energy and save the oled from continuosly turn on. I made it to for portable use powered by Lipo 3.7v with TP4056 rechargeable modul.
-* DS3231 SQW pin has to be connected to Arduino interrupt capable pin (D2 or D3 on Pro Mini/Nano). Without these pin alarm will not triggered.
+* 
+* The Clock use LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF).
+* so it's only can wakw when interrupt get's LOW om INT0 & INT1 (pin D2 & D3 on Pro Mini / Nano).
+* in Sleep Mode, the display is turn Off (blank), without Alarm triggered LOW on pin 2, use Button 1 which attach to pin 3 to wake the display.
+* I made this clock for portable use powered by Lipo 3.7v. Power saving is a must.
 
 # What You Need?
 1. DS3231 RTC
@@ -16,16 +18,29 @@
 4. 2 Button
 5. Passive Buzzer
 6. On/Off Switch
-7. 2 Custom Fonts Provided (Paste it inside Adafruit_GFX_Library / Fonts)
+7. 2 Custom Fonts Provided (Paste it inside Adafruit_GFX_Library / Fonts).
 
-8. (Optional) LiPo 3.7v Battery (or 2 AA Battery with Holder)
-9. (Optional) TP4056 Charging Module (if use LiPo Battery)
+8. (Optional) LiPo 3.7v Battery (or 2 AA Battery with Holder).
+9. (Optional) TP4056 Charging Module (if use LiPo Battery).
 
 # What to connect where?
  1. connect display and DS3231 to I2C pin as usual.
  2. connect SQW pin from DS3231 to pin 2 of Arduino.
  3. connect button 1 to pin 3 (button interrupt), connect button 2 to pin 4.
- 4. connect Buzzer to pin 5. 
+ 4. connect Buzzer to pin 5.
+
+# What Tou Need?
+1. DS3231 RTC
+2. Arduino Pro Mini or Arduino Nano (ATmega328P 3.3v or 5v).
+3. Oled Display 0'96 SSD1306.
+4. 2 Button.
+5. Passive Buzzer.
+6. On/Off Switch.
+7. (Optional) LiPo 3.7v Battery (or AA Battery).
+8. (Optional) TP4056 Module to charge the LiPo.
+
+ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
+( Adafuirt_GFX_Library / Fonts / HERE ).
 
 # HOW TO USE
 * Press Button 1 & Button 2 simultaneously to enter Menu.

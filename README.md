@@ -32,4 +32,4 @@
 * Press any button to stop alarm.
 
 # Schematic (Wiring Diagram)
-[](https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Schematic.jpg)
+[!](https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Schematic.jpg)

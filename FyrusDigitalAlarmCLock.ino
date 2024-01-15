@@ -1133,7 +1133,227 @@ void setAlarmTime2(int hour, int minute) {
   rtc.setAlarm2(alarmTime2, DS3231_A2_Hour);
 }
 
+// Alarm 1 Settings display
+void Set_Alarm() {
+  read_button();
+  
+  display.clearDisplay();
 
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+
+  Set_Alarm_Display();
+
+  if (btn_DOW == LOW) {
+    delay(100);
+    Menu_Set_Alarm++;
+    if (Menu_Set_Alarm > 5) Menu_Set_Alarm = 1;
+  }
+
+  if (btn_SEL == LOW && Menu_Set_Alarm == 1) {
+    delay(250);
+    Set_hour_alarm = true;
+  }
+
+  if (btn_SEL == LOW && Menu_Set_Alarm == 2) {
+    delay(250);
+    Set_minute_alarm = true;
+  }
+
+  // Enable Alarm 1
+  if (btn_SEL == LOW && Menu_Set_Alarm == 3) {
+    delay(500);
+    
+    Display_to_save();
+
+    Alarm_Stat = 1;
+    delay(100);
+  }
+
+
+  // Disable Alarm 1
+  if (btn_SEL == LOW && Menu_Set_Alarm == 4) {
+    delay(500);
+
+    rtc.disableAlarm(1);
+    rtc.clearAlarm(1);
+    
+    Display_to_save();
+    
+    Alarm_Stat = 0;
+    delay(100);
+  }
+
+
+  if (btn_SEL == LOW && Menu_Set_Alarm == 5) {
+    delay(500);
+    Menu_Set_Alarm = 0;
+    Menu_Stat = false; // remove to go back to Menu
+    Menu_Set = false;
+  }
+
+
+  // Cursor position on the Alarm 1 Settings
+  if (Menu_Set_Alarm == 1) {
+    Set_Alarm_Cursor(Menu_Set_Alarm);
+  } else if (Menu_Set_Alarm == 2) {
+    Set_Alarm_Cursor(Menu_Set_Alarm);
+  } else if (Menu_Set_Alarm == 3) {
+    Set_Alarm_Cursor(Menu_Set_Alarm);
+  } else if (Menu_Set_Alarm == 4) {
+    Set_Alarm_Cursor(Menu_Set_Alarm);
+  } else if (Menu_Set_Alarm == 5) {
+    Set_Alarm_Cursor(Menu_Set_Alarm);
+  } 
+
+
+  // setting the Hour for Alarm 1
+  while (Set_hour_alarm == true && Menu_Set_Alarm == 1) {
+    read_button();
+    
+    display.clearDisplay();
+
+    if (btn_DOW == LOW) {
+      DateTime alarmTime = rtc.getAlarm1();
+      _delay = 50;
+      delay(_delay);
+      int newHour = (alarmTime.hour() + 1) % 24;
+      setAlarmTime(newHour, alarmTime.minute());
+    }
+
+    if (btn_SEL == LOW) {
+      delay(500);
+      Set_hour_alarm = false;
+    }
+
+    if (btn_DOW == HIGH && btn_SEL == HIGH) {
+      _delay = 100;
+    }
+
+    Set_Alarm_Display();
+    Set_Alarm_Text();
+
+    blink_cursor = !blink_cursor;
+    if (blink_cursor == true) {
+      display.fillRect(22, 8, 25, 20, BLACK);
+    }
+
+    display.display();
+    delay(_delay);
+  }
+
+
+  // setting the Minute for Alarm 1
+  while (Set_minute_alarm == true && Menu_Set_Alarm == 2) {
+    read_button();
+    
+    display.clearDisplay();
+
+    if (btn_DOW == LOW) {
+      DateTime alarmTime = rtc.getAlarm1();
+      _delay = 50;
+      delay(_delay);
+      int newMinute = (alarmTime.minute() + 1) % 60;
+      setAlarmTime(alarmTime.hour(), newMinute);
+    }
+
+    if (btn_SEL == LOW) {
+      delay(500);
+      Set_minute_alarm = false;
+    }
+
+    if (btn_DOW == HIGH && btn_SEL == HIGH) {
+      _delay = 100;
+    }
+
+    Set_Alarm_Display();
+    Set_Alarm_Text();
+
+    blink_cursor = !blink_cursor;
+    if (blink_cursor == true) {
+      display.fillRect(60, 8, 25, 20, BLACK);
+    }
+
+    display.display();
+    delay(_delay);
+  }
+  
+  display.display();
+}
+
+
+// Alarm 1 Settings display
+void Set_Alarm_Display() {
+
+  if (Alarm_Stat == 0) {
+    display.setTextSize(1);
+    display.setCursor(90, 35);
+    display.print(F("Status"));
+    display.setTextSize(2);
+    display.setCursor(90, 46);
+    display.print(F("OFF"));
+  } else {
+    display.setCursor(90, 35);
+    display.print(F("Status"));
+    display.setTextSize(2);
+    display.setCursor(95, 46);
+    display.print(F("ON"));
+  }
+
+
+  DateTime alarmTime = rtc.getAlarm1();
+
+  display.setTextSize(1);
+  display.setFont(&FyrusClockFontS);
+
+        display.setCursor(22, 22);
+        int hour12_1 = alarmTime.hour();
+        bool isPM_1  = false;
+        
+        if (hour12_1 >= 12) {
+              isPM_1  = true;
+        if (hour12_1 > 12) {
+            hour12_1 -= 12;
+            }
+        } else if (hour12_1 == 0) {
+            hour12_1 = 12;
+        }
+
+        if (hour12_1 < 10) {
+          display.print(F("0"));
+        }
+          display.print(hour12_1, DEC);
+
+          display.setCursor(52, 22);
+          display.print(F(":"));
+
+        display.setCursor(60, 22);
+        if (alarmTime.minute() < 10) {
+          display.print(F("0"));
+        }
+          display.print(alarmTime.minute(), DEC);
+
+          display.setCursor(90, 25);
+          display.print(isPM_1 ? F(" PM") : F(" AM"));
+
+          display.setFont();
+}
+
+
+// Function to save Alarm in DS3231 memory
+void setAlarmTime2(int hour, int minute) {
+  rtc.disableAlarm(2);
+  rtc.clearAlarm(2);
+
+  DateTime now = rtc.now();
+  DateTime alarmTime2(now.year(), now.month(), now.day(), hour, minute, 0);
+
+  if (alarmTime2 < now) {
+    // If the alarm time is in the past, set it for the next day
+    alarmTime2 = alarmTime2 + TimeSpan(1, 0, 0, 0);
+  }
+  rtc.setAlarm2(alarmTime2, DS3231_A2_Hour);
+}
 
 // Alarm 2 Settings
 void Set_Alarm2() {
@@ -1237,7 +1457,7 @@ void Set_Alarm2() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(22, 10, 25, 20, BLACK);
+      display.fillRect(22, 8, 25, 20, BLACK);
     }
 
     display.display();
@@ -1273,7 +1493,7 @@ void Set_Alarm2() {
 
     blink_cursor = !blink_cursor;
     if (blink_cursor == true) {
-      display.fillRect(57, 10, 25, 20, BLACK);
+      display.fillRect(60, 8, 25, 20, BLACK);
     }
 
     display.display();
@@ -1282,7 +1502,6 @@ void Set_Alarm2() {
 
   display.display();
 }
-
 
 
 // Alarm 2 Settings display
@@ -1306,9 +1525,10 @@ void Set_Alarm_Display2() {
 
   DateTime alarmTime2 = rtc.getAlarm2();
 
-  display.setTextSize(2);
+  display.setTextSize(1);
+  display.setFont(&FyrusClockFontS);
 
-        display.setCursor(22, 10);
+        display.setCursor(22, 22);
         int hour12_2 = alarmTime2.hour();
         bool isPM_2  = false;
         
@@ -1325,15 +1545,21 @@ void Set_Alarm_Display2() {
           display.print(F("0"));
         }
           display.print(hour12_2, DEC);
+
+          display.setCursor(52, 22);
           display.print(F(":"));
-          
+
+          display.setCursor(60, 22);
         if (alarmTime2.minute() < 10) {
           display.print(F("0"));
         }
           display.print(alarmTime2.minute(), DEC);
-          display.print(isPM_2 ? F(" PM") : F(" AM"));
-}
 
+          display.setCursor(90, 25);
+          display.print(isPM_2 ? F(" PM") : F(" AM"));
+
+          display.setFont();
+}
 
 
 // Cursor position in Alarm Settings
@@ -1345,7 +1571,7 @@ void Set_Alarm_Cursor(byte slc) {
     display.print(F("Set Alarm"));
 
   } else if (slc == 2) {
-    display.drawBitmap(67, 0, Select_Buttom, 5, 3, WHITE);
+    display.drawBitmap(70, 0, Select_Buttom, 5, 3, WHITE);
     display.setTextSize(1);
     display.setCursor(5, 45);
     display.print(F("Set Alarm"));

@@ -2,14 +2,21 @@
 * 12 Hour Clock Display
 * Edit Alarm with button (2 Editable Alarm)
 * Edit Time, Date with button
-* Low Power sleep mode ([Low Power Library](https://github.com/rocketscream/Low-Power))
+* Snooze Alarm for 5 minutes
+* Low Power sleep mode
 * SQW Interrupt
-* Save Alarm to DS3231 AT24C32 Memory ([RTClib](https://github.com/adafruit/RTClib))
+* Save Alarm to DS3231 AT24C32 Memory
 * 
 * The Clock use LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF).
 * so it's only can wakw when interrupt get's LOW om INT0 & INT1 (pin D2 & D3 on Pro Mini / Nano).
 * in Sleep Mode, the display is turn Off (blank), without Alarm triggered LOW on pin 2, use Button 1 which attach to pin 3 to wake the display.
 * I made this clock for portable use powered by Lipo 3.7v. Power saving is a must.
+
+# Library
+* RTClib    - https://github.com/adafruit/RTClib
+* Low Power - https://github.com/rocketscream/Low-Power
+* TimerOne  - https://github.com/PaulStoffregen/TimerOne
+* Adafruit  - https://github.com/adafruit/Adafruit_SSD1306
 
 # What Tou Need?
 1. DS3231 RTC

@@ -328,7 +328,7 @@ void loop() {
     Button_Sound(0);
     Alarm_Start = false;
     Alarm_Duration = 0;
-  } else if (btn_SEL == LOW && Alarm_Start == true){
+  } else if (btn_SEL == LOW && Alarm_Start == true && Alarm_Sound == true){
     rtc.clearAlarm(1);
     Button_Sound(0);
     Alarm_Start = false;
@@ -342,7 +342,7 @@ void loop() {
     Button_Sound2(0);
     Alarm_Start2 = false;
     Alarm_Duration2 = 0;
-  } else if (btn_SEL == LOW && Alarm_Start == true){
+  } else if (btn_SEL == LOW && Alarm_Start == true && Alarm_Sound2 == true){
     rtc.clearAlarm(2);
     Button_Sound2(0);
     Alarm_Start2 = false;

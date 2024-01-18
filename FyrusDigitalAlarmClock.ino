@@ -209,7 +209,7 @@ void loop() {
        }
 
         // Alarm 2 triggered
-        if (rtc.alarmFired(2) == true){
+        else if (rtc.alarmFired(2) == true){
           Alarm_Start2 = true;
           Alarm_Sound2 = !Alarm_Sound2;
           if (Alarm_Sound2 == true) {
@@ -243,9 +243,7 @@ void loop() {
         }
       }
 
-
   read_button();
-
 
   // Condition to Stop Alarm 1
   if (btn_DOW == LOW && rtc.alarmFired(1) == true) {

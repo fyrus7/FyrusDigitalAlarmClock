@@ -40,8 +40,8 @@ ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
 # HOW TO USE
 * Press Button 1 & Button 2 simultaneously to enter Menu.
 * Press Button 1 to wake from Low Power Sleep Mode (turn display ON).
-* Press Button 1 to stop alarm when it's fired..
-* Press Button 2 to Snooze alarm when it's fired.
+* Press Button 1 to STOP Alarm when it's fired..
+* Press Button 2 to SNOOZE Alarm when it's fired.
 
 # Schematic (Wiring Diagram)
 ![](https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Schematic.jpg)

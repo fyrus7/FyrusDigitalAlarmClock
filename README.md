@@ -4,7 +4,7 @@
 * Edit Time, Date with button
 * Snooze Alarm for 5 minutes
 * Low Power sleep mode
-* SQW Interrupt
+* DS3231 Interrupt (SQW pin)
 * Save Alarm to DS3231 AT24C32 Memory
 * 
 * The Clock use LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF).

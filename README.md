@@ -1,5 +1,5 @@
 # Fyrus Digital Alarm Clock
-* 12 Hour Clock Display
+* 12 Hour Clock Display [ AM / PM ]
 * Edit Alarm with button (2 Editable Alarm)
 * Edit Time, Date with button
 * Snooze Alarm for 5 minutes

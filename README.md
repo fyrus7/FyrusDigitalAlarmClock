@@ -8,7 +8,7 @@
 * Save Alarm to DS3231 AT24C32 Memory
 * 
 * The Clock use LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF).
-* so it's only can wakw when interrupt get's LOW om INT0 & INT1 (pin D2 & D3 on Pro Mini / Nano).
+* so it's only can wake when interrupt get's LOW om INT0 & INT1 (pin D2 & D3 on Pro Mini / Nano).
 * in Sleep Mode, the display is turn Off (blank), without Alarm triggered LOW on pin 2, use Button 1 which attach to pin 3 to wake the display.
 * I made this clock for portable use powered by Lipo 3.7v. Power saving is a must.
 

@@ -45,3 +45,7 @@ ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
 
 # Schematic (Wiring Diagram)
 ![](https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Schematic.jpg)
+
+# Module Mod
+these are modification I do on DS3231 RTC, remove LED because it's useless anyway, remove the charging resistor to use normal CR2032 coin cell battery. If your module come with a rechargeble LIR2032 you dont need to remove charging resistor.
+![](https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/DS3231%20MOD.jpg)

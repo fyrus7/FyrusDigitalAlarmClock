@@ -18,34 +18,34 @@
 * Adafruit  - https://github.com/adafruit/Adafruit_SSD1306
 
 # What Tou Need?
-*  - Arduino Pro Mini 3.3v 8Mhz
-*  - DS3231 RTC
-*  - 128x64 0'96 Oled Display SSD1306
-*  - Active Buzzer
-*  - 2 mini Button
-*  - Small On/Off Switch
-*  - 3.7v Lithium Battery
-*  - TP4056 Battery Charger
-*  - Small Electrical Box
+- Arduino Pro Mini 3.3v 8Mhz
+- DS3231 RTC
+- 128x64 0'96 Oled Display SSD1306
+- Active Buzzer
+- 2 mini Button
+- Small On/Off Switch
+- 3.7v Lithium Battery
+- TP4056 Battery Charger
+- Small Electrical Box
 
 ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
-* ( Adafuirt_GFX_Library / Fonts / HERE ).
+- ( Adafuirt_GFX_Library / Fonts / HERE ).
 
 # What to connect where?
- 1. connect display and DS3231 to I2C pin as usual.
- 2. connect SQW pin from DS3231 to pin 2 of Arduino.
- 3. connect button 1 to pin 3 (button interrupt), connect button 2 to pin 4.
- 4. connect Buzzer to pin 5.
+- connect display and DS3231 to I2C pin as usual.
+- connect SQW pin from DS3231 to pin 2 of Arduino.
+- connect button 1 to pin 3 (button interrupt), connect button 2 to pin 4.
+- connect Buzzer to pin 5.
 
 # HOW TO USE
 2 Button operation:
-*  - Button 1 to select
-*  - Button 2 to scroll down
-*  - Press both Button to enter Menu
-*
+- Button 1 to select
+- Button 2 to scroll down
+- Press both Button to enter Menu
+
 Alarm Triggered condition:
-*  - Button 1 to Clear   / trigger again after 24 hours
-*  - Button 2 to Disable / remove alarm from triggering again
+- Button 1 to Clear   / trigger again after 24 hours
+- Button 2 to Disable / remove alarm from triggering again
 
 
 # Schematic (Wiring Diagram)

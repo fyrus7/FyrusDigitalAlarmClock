@@ -33,11 +33,11 @@ ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
 - ( Adafuirt_GFX_Library / Fonts / HERE ).
 
 # What to connect where?
-- connect display and DS3231 to I2C pin as usual.
-- connect SQW pin  to pin 2 of Arduino (D2 / Interrupt - INT0)
-- connect button 1 to pin 3 (D3 / Interrupt - INT1)
-- connect button 2 to pin 4.
-- connect Buzzer to pin 5.
+- connect Display & DS3231 I2C ( VCC to VCC / GND to GND / SDA to A4 / SCL to A5 ) 
+- connect Pin 2 to SQW pin  (D2 / Interrupt - INT0)
+- connect Pin 3 to button 1 (D3 / Interrupt - INT1)
+- connect Pin 4 to button 2
+- connect Pin 5 to Buzzer positive.
 
 # HOW TO USE
 2 Button operation:

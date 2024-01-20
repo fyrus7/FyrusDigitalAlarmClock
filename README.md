@@ -2,6 +2,7 @@
 * 12 Hour Clock Display [ AM / PM ]
 * Edit Alarm with button (2 Editable Alarm)
 * Edit Time, Date with button
+* 5 Minute Snooze Time
 * Low Power sleep mode
 * DS3231 Interrupt (SQW pin)
 * Save Alarm to DS3231 AT24C32 Memory
@@ -33,8 +34,9 @@ ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
 
 # What to connect where?
 - connect display and DS3231 to I2C pin as usual.
-- connect SQW pin from DS3231 to pin 2 of Arduino.
-- connect button 1 to pin 3 (button interrupt), connect button 2 to pin 4.
+- connect SQW pin  to pin 2 of Arduino (D2 / Interrupt - INT0)
+- connect button 1 to pin 3 (D3 / Interrupt - INT1)
+- connect button 2 to pin 4.
 - connect Buzzer to pin 5.
 
 # HOW TO USE
@@ -44,8 +46,9 @@ ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
 - Press both Button to enter Menu
 
 Alarm Triggered condition:
-- Button 1 to Clear   / trigger again after 24 hours
-- Button 2 to Disable / remove alarm from triggering again
+- Button 1 to Snooze / add 5 Minute snooze
+- Button 2 to Clear  / stop alarm next until 24 hours
+- DO NOTHING         / alarm clear stop after 5 minute
 
 
 # Schematic (Wiring Diagram)

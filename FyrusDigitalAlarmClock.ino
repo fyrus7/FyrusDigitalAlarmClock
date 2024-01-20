@@ -8,8 +8,8 @@
 *  - Press both Button to enter Menu
 *
 *  Alarm Triggered condition:
-*  - Button 1 to Clear   / trigger again after 24 hours
-*  - Button 2 to Disable / remove alarm from triggering again
+*  - Button 1 to Snooze / add 5 minute snooze
+*  - Button 2 to Clear  / clear for 24 hours
 *
 *  Things:
 *  - Arduino Pro Mini 3.3v 8Mhz
@@ -23,7 +23,6 @@
 *  - Small Electrical Box
 *
 */
-
 
 // 'Select_Buttom', 5x3px
 const unsigned char Select_Buttom [] PROGMEM = {
@@ -237,33 +236,31 @@ void loop() {
   // Stop Alarm 1
   if (b_DOWN == LOW && rtc.alarmFired(1) == true) {
     rtc.clearAlarm(1);
-    rtc.disableAlarm(1);
     Button_Sound(0);
     Alarm_Start = false;
     Alarm_Duration = 0;
-    Alarm_Stat = 0;
-    // Remove Alarm 1
+    // Snooze Alarm 1 for 5 minute
     } else if (b_GOTO == LOW && rtc.alarmFired(1) == true){
       rtc.clearAlarm(1);
       Button_Sound(0);
       Alarm_Start = false;
       Alarm_Duration = 0;
+      rtc.setAlarm1(rtc.now() + TimeSpan(0, 0, 5, 0), DS3231_A1_Minute);
       }
 
   // Stop Alarm 2
   if (b_DOWN == LOW && rtc.alarmFired(2) == true) {
     rtc.clearAlarm(2);
-    rtc.disableAlarm(2);
     Button_Sound(0);
     Alarm_Start = false;
     Alarm_Duration = 0;
-    Alarm_Stat2 = 0;
-    // Remove Alarm 1
+    // Snooze Alarm 2 for 5 minute
     } else if (b_GOTO == LOW && rtc.alarmFired(2) == true){
       rtc.clearAlarm(2);
       Button_Sound(0);
       Alarm_Start = false;
       Alarm_Duration = 0;
+      rtc.setAlarm2(rtc.now() + TimeSpan(0, 0, 5, 0), DS3231_A2_Minute);
       }
 
 
@@ -1292,11 +1289,11 @@ void Alarm_Notify(){
 
         display.setCursor(80, 0);
         display.setTextSize(1);
-        display.print(F(" Clear >"));
+        display.print(F("Snooze >"));
         display.setCursor(0, 0);
         display.print(F(" Alarm!"));
         display.setCursor(80, 56);
-        display.print(F("Remove >"));
+        display.print(F(" Clear >"));
 
         display.setTextSize(1);
         display.setFont(&FyrusClockFontL);

@@ -1,3 +1,30 @@
+/*
+*
+*  Digital Alarm Clock by Fyrus [ https://iamfyrus.com ]
+*
+*  2 Button operation:
+*  - Button 1 to select
+*  - Button 2 to scroll down
+*  - Press both Button to enter Menu
+*
+*  Alarm Triggered condition:
+*  - Button 1 to Clear   / trigger again after 24 hours
+*  - Button 2 to Disable / remove alarm from triggering again
+*
+*  Things:
+*  - Arduino Pro Mini 3.3v 8Mhz
+*  - DS3231 RTC
+*  - 128x64 0'96 Oled Display SSD1306
+*  - Active Buzzer
+*  - 2 mini Button
+*  - Small On/Off Switch
+*  - 3.7v Lithium Battery
+*  - TP4056 Battery Charger
+*  - Small Electrical Box
+*
+*/
+
+
 // 'Select_Buttom', 5x3px
 const unsigned char Select_Buttom [] PROGMEM = {
   0xf8, 0x70, 0x20
@@ -21,13 +48,13 @@ char st[2];
 char _nameoftheDay[9];
 char _monthsName[3];
 
-const char daysOfTheWeek_0[] PROGMEM = "SUN";   
-const char daysOfTheWeek_1[] PROGMEM = "MON";
-const char daysOfTheWeek_2[] PROGMEM = "TUE";
-const char daysOfTheWeek_3[] PROGMEM = "WED";
-const char daysOfTheWeek_4[] PROGMEM = "THU";
-const char daysOfTheWeek_5[] PROGMEM = "FRI";
-const char daysOfTheWeek_6[] PROGMEM = "SAT";
+const char daysOfTheWeek_0[] PROGMEM = "Sun";   
+const char daysOfTheWeek_1[] PROGMEM = "Mon";
+const char daysOfTheWeek_2[] PROGMEM = "Tue";
+const char daysOfTheWeek_3[] PROGMEM = "Wed";
+const char daysOfTheWeek_4[] PROGMEM = "Thu";
+const char daysOfTheWeek_5[] PROGMEM = "Fri";
+const char daysOfTheWeek_6[] PROGMEM = "Sat";
 
 const char* const daysOfTheWeek_table[] PROGMEM = {
   daysOfTheWeek_0,
@@ -38,18 +65,18 @@ const char* const daysOfTheWeek_table[] PROGMEM = {
   daysOfTheWeek_5,
   daysOfTheWeek_6};
 
-const char months_name_0[] PROGMEM = "JAN";   
-const char months_name_1[] PROGMEM = "FEB";
-const char months_name_2[] PROGMEM = "MAR";
-const char months_name_3[] PROGMEM = "APR";
-const char months_name_4[] PROGMEM = "MAY";
-const char months_name_5[] PROGMEM = "JUN";
-const char months_name_6[] PROGMEM = "JUL";
-const char months_name_7[] PROGMEM = "AUG";
-const char months_name_8[] PROGMEM = "SEP";
-const char months_name_9[] PROGMEM = "OCT";
-const char months_name_10[] PROGMEM = "NOV";
-const char months_name_11[] PROGMEM = "DEC";
+const char months_name_0[] PROGMEM = "Jan";   
+const char months_name_1[] PROGMEM = "Feb";
+const char months_name_2[] PROGMEM = "Mar";
+const char months_name_3[] PROGMEM = "Apr";
+const char months_name_4[] PROGMEM = "May";
+const char months_name_5[] PROGMEM = "Jun";
+const char months_name_6[] PROGMEM = "Jul";
+const char months_name_7[] PROGMEM = "Aug";
+const char months_name_8[] PROGMEM = "Sep";
+const char months_name_9[] PROGMEM = "Oct";
+const char months_name_10[] PROGMEM = "Nov";
+const char months_name_11[] PROGMEM = "Dec";
 
 const char* const months_name_table[] PROGMEM = {
   months_name_0, months_name_1, months_name_2, months_name_3,
@@ -82,18 +109,17 @@ byte Alarm_Stat = 0;
 bool Set_hour_alarm = false;
 bool Set_minute_alarm = false;
 byte Menu_Set_Alarm = 0;
-bool Alarm_Sound = false;
-bool Alarm_Start = false;
-byte Alarm_Duration = 0;
 
 // Alarm 2
 byte Alarm_Stat2 = 0;
 bool Set_hour_alarm2 = false;
 bool Set_minute_alarm2 = false;
 byte Menu_Set_Alarm2 = 0;
-bool Alarm_Sound2 = false;
-bool Alarm_Start2 = false;
-byte Alarm_Duration2 = 0;
+
+// Alarm Start & Sound
+bool Alarm_Sound = false;
+bool Alarm_Start = false;
+byte Alarm_Duration = 0;
 
 
 unsigned long previousGetTimeDate = 0;    // will store last time was updated
@@ -174,8 +200,8 @@ void loop() {
       }
 
 
-        // Alarm 1 triggered
-        if (rtc.alarmFired(1) == true){
+        // Alarm Triggered
+        if (rtc.alarmFired(1) == true || rtc.alarmFired(2) == true){
           Alarm_Start = true;
           Alarm_Sound = !Alarm_Sound;
           if (Alarm_Sound == true) {
@@ -185,9 +211,10 @@ void loop() {
               }
 
         Alarm_Duration++;
-        // 299 = 5 min Alarm 1 duration
+        // 299 = 5 min Alarm Duration
         if (Alarm_Duration > 299) {
-          rtc.disableAlarm(1);
+          rtc.clearAlarm(1);
+          rtc.clearAlarm(2);
           Button_Sound(0);
           Alarm_Duration = 0;
           Alarm_Start = false;
@@ -195,29 +222,8 @@ void loop() {
         Alarm_Notify();
        }
 
-        // Alarm 2 triggered
-        else if (rtc.alarmFired(2) == true){
-          Alarm_Start2 = true;
-          Alarm_Sound2 = !Alarm_Sound2;
-          if (Alarm_Sound2 == true) {
-            Button_Sound2(1);
-            } else {
-              Button_Sound2(0);
-              }
-
-        Alarm_Duration2++;
-        // 299 = 5 min Alarm 2 duration
-        if (Alarm_Duration2 > 299) {
-          rtc.disableAlarm(2);
-          Button_Sound2(0);
-          Alarm_Duration2 = 0;
-          Alarm_Start2 = false;
-        }
-        Alarm_Notify();
-        }
-
         else {
-          // Default Clock Loop Display
+          // Default Clock Loop
           Digital_Clock_and_Date(_hour, _minute, _second, _dtw, _day, _month ,_year);
           }
         display.display();
@@ -248,16 +254,16 @@ void loop() {
   if (b_DOWN == LOW && rtc.alarmFired(2) == true) {
     rtc.clearAlarm(2);
     rtc.disableAlarm(2);
-    Button_Sound2(0);
-    Alarm_Start2 = false;
-    Alarm_Duration2 = 0;
+    Button_Sound(0);
+    Alarm_Start = false;
+    Alarm_Duration = 0;
     Alarm_Stat2 = 0;
     // Remove Alarm 1
     } else if (b_GOTO == LOW && rtc.alarmFired(2) == true){
       rtc.clearAlarm(2);
-      Button_Sound2(0);
-      Alarm_Start2 = false;
-      Alarm_Duration2 = 0;
+      Button_Sound(0);
+      Alarm_Start = false;
+      Alarm_Duration = 0;
       }
 
 
@@ -398,8 +404,8 @@ void GetDateTime(){
 void Digital_Clock_and_Date(byte h, byte m, byte s, byte dtw, byte dy, byte mt, int yr) {
 
   if (Menu_Stat == false) {
-  display.drawLine(0, 12, 128, 12, SSD1306_WHITE);
-  display.drawLine(0, 50, 128, 50, SSD1306_WHITE);
+  display.drawLine(0, 12, 128, 12, WHITE);
+  display.drawLine(0, 50, 128, 50, WHITE);
   }
 
   display.setTextColor(WHITE);
@@ -502,8 +508,8 @@ void Menu_Display(byte slct) {
     display.setTextSize(1);
     display.setFont(&FyrusClockFontS2);
 
-  display.setCursor(9, 38);
-  display.print(F("TIME:DATE"));
+  display.setCursor(1, 38);
+  display.print(F("TIME : DATE"));
 
   }
   display.setFont();
@@ -1277,14 +1283,11 @@ void Button_Sound(byte snd) {
   digitalWrite(Buzzer, snd);
 }
 
-void Button_Sound2(byte snd) {
-  digitalWrite(Buzzer, snd);
-}
 
 // ---- Top Bar & Alarm Triggered Display ---- //
 void Alarm_Notify(){
-  display.clearDisplay();
 
+        display.clearDisplay();
         char buff[] = "hh:mm";
 
         display.setCursor(80, 0);

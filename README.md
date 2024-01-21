@@ -52,7 +52,7 @@ Alarm Triggered condition:
 
 
 # Schematic (Wiring Diagram)
-![](https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Schematic.jpg)
+![](https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Schematic_.jpg)
 
 # Module Mod
 these are modification I made on DS3231 RTC, remove LED because it's useless anyway, remove the charging resistor to use normal CR2032 coin cell battery. If your module come with a rechargeble LIR2032 you dont need to remove charging resistor.

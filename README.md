@@ -1,3 +1,10 @@
+# About
+- I search online looks like no one is making a DS3231 based alarm clock use the module eeprom instead use the MCU eeprom.
+- if the alarm is save into MCU memory, when sleep mode is involved there is no way to wake the clock without external interrupt.
+- when the alarm is save into MCU eeprom, DS3231 cannot wake the board with its Interrupt pin (SQW).
+- the only way to make the Interrupt pin usable is to save the alarm time into DS3231 memory not MCU memory.
+- So, here it is...I just made an alarm clock with interrupt enable so I can use oled display and turn the display off all the time and only wake it when I want to see time and when the alarm is triggered :)
+
 # Fyrus Digital Alarm Clock
 * 12 Hour Clock Display [ AM / PM ]
 * Edit Alarm with button (2 Editable Alarm)

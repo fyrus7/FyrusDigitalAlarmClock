@@ -160,8 +160,13 @@ void setup() {
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.clearDisplay();
 
+  display.setTextColor(WHITE);
+  display.setTextSize(1);
+  display.setCursor(0, 30);
+  display.print(F("Fyrus DAC : v1.0_S"));
+
   display.display();
-  delay(1000);
+  delay(3000);
 
   Timer1.initialize(1000000);
   Timer1.attachInterrupt(timerISR);
@@ -239,13 +244,17 @@ void loop() {
     Button_Sound(0);
     Alarm_Start = false;
     Alarm_Duration = 0;
+    Clear();
     // Snooze Alarm 1 for 5 minute
     } else if (b_GOTO == LOW && rtc.alarmFired(1) == true){
       rtc.clearAlarm(1);
+      rtc.disableAlarm(1);
       Button_Sound(0);
       Alarm_Start = false;
       Alarm_Duration = 0;
+      DateTime now = rtc.now();
       rtc.setAlarm1(rtc.now() + TimeSpan(0, 0, 5, 0), DS3231_A1_Minute);
+      Snooze();
       }
 
   // Stop Alarm 2
@@ -254,13 +263,17 @@ void loop() {
     Button_Sound(0);
     Alarm_Start = false;
     Alarm_Duration = 0;
+    Clear();
     // Snooze Alarm 2 for 5 minute
     } else if (b_GOTO == LOW && rtc.alarmFired(2) == true){
       rtc.clearAlarm(2);
+      rtc.disableAlarm(2);
       Button_Sound(0);
       Alarm_Start = false;
       Alarm_Duration = 0;
+      DateTime now = rtc.now();
       rtc.setAlarm2(rtc.now() + TimeSpan(0, 0, 5, 0), DS3231_A2_Minute);
+      Snooze();
       }
 
 
@@ -1258,7 +1271,7 @@ void Set_Alarm_Cursor(byte slc) {
   }
 }
 
-// Save popup display
+
 void Display_to_save() {
   display.clearDisplay(); 
   
@@ -1267,6 +1280,36 @@ void Display_to_save() {
   display.setTextColor(WHITE);
   display.setCursor(28, 38);
   display.print(F("SAVED"));
+
+  display.setFont();
+  
+  display.display();
+  delay(500);
+}
+
+void Clear() {
+  display.clearDisplay(); 
+  
+  display.setTextSize(1);
+  display.setFont(&FyrusClockFontS2);
+  display.setTextColor(WHITE);
+  display.setCursor(17, 38);
+  display.print(F("CLEARED"));
+
+  display.setFont();
+  
+  display.display();
+  delay(500);
+}
+
+void Snooze() {
+  display.clearDisplay(); 
+  
+  display.setTextSize(1);
+  display.setFont(&FyrusClockFontS2);
+  display.setTextColor(WHITE);
+  display.setCursor(33, 38);
+  display.print(F("SNOOZE"));
 
   display.setFont();
   

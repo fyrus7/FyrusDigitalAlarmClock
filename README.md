@@ -46,9 +46,9 @@ ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
 - Press both Button to enter Menu
 
 Alarm Triggered condition:
-- Button 1 to Snooze / add 5 Minute snooze
-- Button 2 to Clear  / stop alarm next until 24 hours
-- DO NOTHING         / alarm clear stop after 5 minute
+- Button 1 to Snooze / add 5 Minute snooze.
+- Button 2 to Clear  / stop alarm until next 24 hours if not changing the alarm time.
+- DO NOTHING         / alarm clear after 5 minute and stop until next 24 hour if not changing the alarm time.
 
 
 # Schematic (Wiring Diagram)

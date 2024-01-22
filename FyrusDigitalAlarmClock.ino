@@ -239,39 +239,37 @@ void loop() {
 
 
   // Stop Alarm 1
-  if (b_DOWN == LOW && rtc.alarmFired(1) == true) {
+  if (Alarm_Start == true && b_DOWN == LOW && rtc.alarmFired(1) == true) {
     rtc.clearAlarm(1);
     Button_Sound(0);
     Alarm_Start = false;
     Alarm_Duration = 0;
     Clear();
     // Snooze Alarm 1 for 5 minute
-    } else if (b_GOTO == LOW && rtc.alarmFired(1) == true){
+    } else if (Alarm_Start == true && b_GOTO == LOW && rtc.alarmFired(1) == true){
       rtc.clearAlarm(1);
       rtc.disableAlarm(1);
       Button_Sound(0);
       Alarm_Start = false;
       Alarm_Duration = 0;
-      DateTime now = rtc.now();
       rtc.setAlarm1(rtc.now() + TimeSpan(0, 0, 5, 0), DS3231_A1_Minute);
       Snooze();
       }
 
   // Stop Alarm 2
-  if (b_DOWN == LOW && rtc.alarmFired(2) == true) {
+  if (Alarm_Start == true && b_DOWN == LOW && rtc.alarmFired(2) == true) {
     rtc.clearAlarm(2);
     Button_Sound(0);
     Alarm_Start = false;
     Alarm_Duration = 0;
     Clear();
     // Snooze Alarm 2 for 5 minute
-    } else if (b_GOTO == LOW && rtc.alarmFired(2) == true){
+    } else if (Alarm_Start == true && b_GOTO == LOW && rtc.alarmFired(2) == true){
       rtc.clearAlarm(2);
       rtc.disableAlarm(2);
       Button_Sound(0);
       Alarm_Start = false;
       Alarm_Duration = 0;
-      DateTime now = rtc.now();
       rtc.setAlarm2(rtc.now() + TimeSpan(0, 0, 5, 0), DS3231_A2_Minute);
       Snooze();
       }

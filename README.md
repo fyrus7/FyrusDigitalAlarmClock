@@ -70,4 +70,4 @@ I also remove the power led and on-board regulator and replace it by MCP1700 sot
 
 Incase you wondering how I solder the small SMD chip, or you can buy adapter for that.
 
-<img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/IMG20240124193754.jpg" width="45%"> <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/sot23todip.jpg" width="50%">
+<img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/IMG20240124193754.jpg" width="50%"> <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Sot23toDIP.jpg" width="50%">

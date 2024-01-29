@@ -66,8 +66,8 @@ these are modification I made on DS3231 RTC, remove LED because it's useless any
 
 I also remove the power led and on-board regulator and replace it by MCP1700 sot-23 for more power saving.
 
-<img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/DS3231%20MOD.jpg" width="47%"> <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Pro%20Mini%20%26%20MCP1700.jpg" width="50%">
+<img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/DS3231%20MOD.jpg" width="48%"> <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Pro%20Mini%20%26%20MCP1700.jpg" width="50%">
 
 Incase you wondering how I solder the small SMD chip, or you can buy adapter for that.
 
-<img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/IMG20240124193754.jpg" width="43%"> <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/sot23todip.jpg" width="50%">
+<img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/IMG20240124193754.jpg" width="45%"> <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/sot23todip.jpg" width="55%">

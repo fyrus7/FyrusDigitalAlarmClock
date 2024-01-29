@@ -64,11 +64,9 @@ Alarm Triggered condition:
 # Module Mod
 these are modification I made on DS3231 RTC, remove LED because it's useless anyway, remove the charging resistor to use normal CR2032 coin cell battery. If your module come with a rechargeble LIR2032 you dont need to remove charging resistor.
 
-![](https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/DS3231%20MOD.jpg)
-
 I also remove the power led and on-board regulator and replace it by MCP1700 sot-23 for more power saving.
 
-![](https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Pro%20Mini%20%26%20MCP1700.jpg)
+<img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Pro%20Mini%20%26%20MCP1700.jpg" width="50%"> <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/DS3231%20MOD.jpg" width="50%">
 
 Incase you wondering how I solder the small SMD chip, or you can buy adapter for that.
 

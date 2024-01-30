@@ -68,6 +68,6 @@ I also remove the power led and on-board regulator and replace it by MCP1700 sot
 
 <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/DS3231%20MOD.jpg" width="48%"> <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Pro%20Mini%20%26%20MCP1700.jpg" width="50%">
 
-Incase you wondering how I solder the small SMD chip, or you can buy adapter for that.
+Incase you wondering how I solder the small SMD chip, or you can buy adapter for that. Why I'm not using the sot-92? because it's not working by just soldered directly to the MCU, it need 1uF capacitor on Vin/Vout (based on datasheet). So I dont have the capacitor but I have 2 version of MCP1700 on hands.
 
 <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/IMG20240124193754.jpg" width="45%"> <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Sot23toDIP.jpg" width="45%">

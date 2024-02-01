@@ -254,6 +254,7 @@ void loop() {
       Button_Sound(0);
       Alarm_Start = false;
       Alarm_Duration = 0;
+      DateTime now = rtc.now;
       rtc.setAlarm1(rtc.now() + TimeSpan(0, 0, 5, 0), DS3231_A1_Minute);
       Snooze();
       }
@@ -274,6 +275,7 @@ void loop() {
       Button_Sound(0);
       Alarm_Start = false;
       Alarm_Duration = 0;
+      DateTime now = rtc.now;
       rtc.setAlarm2(rtc.now() + TimeSpan(0, 0, 5, 0), DS3231_A2_Minute);
       Snooze();
       }

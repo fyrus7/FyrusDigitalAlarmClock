@@ -244,6 +244,8 @@ void loop() {
     Button_Sound(0);
     Alarm_Start = false;
     Alarm_Duration = 0;
+    DateTime lastAlarm = rtc.getAlarm1();
+    rtc.setAlarm1(lastAlarm, DS3231_A1_Hour);
     Clear();
     // Snooze Alarm 1 for 5 minute
     } else if (Alarm_Start == true && b_GOTO == LOW && rtc.alarmFired(1) == true){
@@ -262,6 +264,8 @@ void loop() {
     Button_Sound(0);
     Alarm_Start = false;
     Alarm_Duration = 0;
+    DateTime lastAlarm = rtc.getAlarm2();
+    rtc.setAlarm2(lastAlarm, DS3231_A2_Hour);
     Clear();
     // Snooze Alarm 2 for 5 minute
     } else if (Alarm_Start == true && b_GOTO == LOW && rtc.alarmFired(2) == true){

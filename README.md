@@ -72,6 +72,6 @@ Incase you wondering how I solder the small SMD chip, or you can buy adapter for
 
 <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/IMG20240124193754.jpg" width="45%"> <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/Sot23toDIP.jpg" width="45%">
 
-After using Sot-23 to DIP adapter
+After using Sot-23 to DIP adapter, I decided not to solder Vin to RAW pin because it's useless anyway. Battery positive goes to center pin on the adapter.
 
 <img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/MCP1700_SOT23toDIP.jpg" width="45%">

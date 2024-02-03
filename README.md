@@ -74,4 +74,4 @@ Incase you wondering how I solder the small SMD chip, or you can buy adapter for
 
 After using Sot-23 to DIP adapter
 
-<img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/MCP1700_SOT23toDIP.jpg" width="50%">
+<img src="https://github.com/fyrus7/FyrusDigitalAlarmClock/blob/main/MCP1700_SOT23toDIP.jpg" width="45%">

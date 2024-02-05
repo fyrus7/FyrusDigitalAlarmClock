@@ -1,9 +1,10 @@
 # About
-- I search online but looks like no one is making an button editable alarm with DS3231 RTC use the module eeprom instead use the MCU eeprom.
-- if the alarm is save into MCU memory, when sleep mode is involved there is no way to wake the clock without external interrupt.
+- I search online but looks like no one is making an button editable alarm with DS3231 RTC that use the module memory. But averyone is using the MCU eeprom to save the alarm set.
+- if the alarm is save into MCU memory, when sleep mode, there is no way to wake the clock without tapping on external interrupt button.
 - when the alarm is save into MCU eeprom, DS3231 cannot wake the board with its Interrupt pin (SQW).
-- the only way to make the Interrupt pin usable is to save the alarm time into DS3231 memory not MCU memory.
-- So, here it is...I just made an alarm clock with interrupt enable so I can use oled display and turn the display off all the time and only wake it when I want to see time and when the alarm is triggered :)
+- the only way to make the Interrupt pin usable is to save the alarm time into DS3231 memory.
+- 
+- So, here it is...I just made an alarm clock with interrupt enable so I can turn the oled display off and turn it on only when i want to see time or when the sets Alarm is triggered :)
 
 # Fyrus Digital Alarm Clock
 * 12 Hour Clock Display [ AM / PM ]

@@ -1,5 +1,5 @@
 # About
-- I search online looks like no one is making a DS3231 based alarm clock use the module eeprom instead use the MCU eeprom.
+- I search online but looks like no one is making an button editable alarm with DS3231 RTC use the module eeprom instead use the MCU eeprom.
 - if the alarm is save into MCU memory, when sleep mode is involved there is no way to wake the clock without external interrupt.
 - when the alarm is save into MCU eeprom, DS3231 cannot wake the board with its Interrupt pin (SQW).
 - the only way to make the Interrupt pin usable is to save the alarm time into DS3231 memory not MCU memory.
@@ -9,7 +9,6 @@
 * 12 Hour Clock Display [ AM / PM ]
 * Edit Alarm with button (2 Editable Alarm)
 * Edit Time, Date with button
-* 5 Minute Snooze Time
 * Low Power sleep mode
 * DS3231 Interrupt (SQW pin)
 * Save Alarm to DS3231 AT24C32 Memory
@@ -35,6 +34,7 @@
 - 3.7v Lithium Battery
 - TP4056 Battery Charger
 - Small Electrical Box
+- MCP1700 Chip (optional)
 
 ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
 - ( Adafuirt_GFX_Library / Fonts / HERE ).
@@ -53,9 +53,9 @@ ALSO, the 2 Fonts provided, paste it inside Adafruit GFX library folder.
 - Press both Button to enter Menu
 
 Alarm Triggered condition:
-- Button 1 to Snooze / add 5 Minute snooze.
-- Button 2 to Clear  / stop alarm until next 24 hours if not changing the alarm time.
-- DO NOTHING         / alarm clear after 5 minute and stop until next 24 hour if not changing the alarm time.
+- Button 1 Stop and Clear Alarm until next 24 hour
+- Button 2 Stop and Remove Alarm settings
+- DO NOTHING / alarm auto stop after 5 minute of non stop beeping.
 
 
 # Schematic (Wiring Diagram)
